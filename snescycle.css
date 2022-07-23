@@ -4,12 +4,47 @@
 .operations {
 	font-family: monospace;
 }
-.cycle {
-
-}
 .total {
 
 }
-tr:nth-child(even) {
+.results:nth-child(even) {
 	background-color: #f2f2f2;
+}
+
+/* Cycle types */
+.cycle {
+	color: black;
+	background-color: white;
+}
+.cycle_internal_operation {
+	color: black;
+	background-color: #9badb7;
+}
+.cycle_penalty {
+	color: black;
+	background-color: #fbf236;
+}
+.cycle_code {
+	color: black;
+	background-color: #99e550;
+}
+.cycle_data {
+	color: black;
+	background-color: #5fcde4;
+}
+.cycle_direct {
+	color: black;
+	background-color: #d95763;
+}
+.cycle_pointer {
+	color: black;
+	background-color: #639bff;
+}
+.cycle_stack {
+	color: black;
+	background-color: #d77bba;
+}
+.cycle_vector {
+	color: black;
+	background-color: #6abe30;
 }

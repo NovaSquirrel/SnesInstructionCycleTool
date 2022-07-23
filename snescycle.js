@@ -100,7 +100,7 @@ var instructionTypes = [
 	"stack", ["pea"],
 	["op", "param", "param", "stackh", "stackl"],
 	"stack", ["pei"],
-	["op", "param", "direct_unaligned", "pointerl", "pointerh", "stackh", "stackl"],
+	["op", "param", "direct_unaligned", "direct16", "direct16", "stackh", "stackl"],
 	"stack", ["per"],
 	["op", "param", "param", "io", "stackh", "stackl"],
 	"stack", ["rts"],
@@ -123,13 +123,13 @@ var instructionTypes = [
 	"absolute long", ["jsl"],
 	["op", "param", "param", "stackb", "io", "param", "stackh", "stackl"],
 	"(absolute)", ["jmp"],
-	["op", "param", "param", "datal", "datah"],
+	["op", "param", "param", "vectorl", "vectorhh"],
 	"[absolute]", ["jml"],
 	["op", "param", "param", "vectorl", "vectorh", "vectorb"],
+	"(absolute,x)", ["jmp"],
+	["op", "param", "param", "io", "vectorcodel", "vectorcodeh"],
 	"(absolute,x)", ["jsr"],
-	["op", "param", "param", "io", "datal", "datah"],
-	"(absolute,x)", ["jsr"],
-	["op", "param", "stackh", "stackl", "param", "io", "datal", "datah"],
+	["op", "param", "stackh", "stackl", "param", "io", "vectorcodel", "vectorcodeh"],
 ];
 
 let a16 = true;
@@ -174,6 +174,8 @@ function costOfStep(step) {
 		case "datahx":
 			return i16 ? dataspeed : 0;
 
+		case "directl16":
+		case "directh16":
 		case "directl":
 			return dpspeed;
 		case "directh":
@@ -207,8 +209,57 @@ function costOfStep(step) {
 		case "vectorh":
 		case "vectorb":
 			return slow;
+		case "vectorcodel":
+		case "vectorcodeh":
+			return codespeed;
 		default:
 			console.log(step);
+	}
+}
+
+function classOfStep(step) {
+	switch(step) {
+		case "io_pagecross_or_i16":
+		case "direct_unaligned":
+		case "io_emulation_and_cross":
+			return "cycle_penalty"
+		case "io":
+			return "cycle_internal_operation"
+		case "op":
+		case "param":
+		case "paramh":
+		case "paramhx":
+			return "cycle_code";
+		case "datal":
+		case "datah":
+		case "datalx":
+		case "datahx":
+			return "cycle_data";
+		case "directl":
+		case "directh":
+		case "direct16":
+		case "directlx":
+		case "directhx":
+			return "cycle_direct";
+		case "pointerl":
+		case "pointerh":
+		case "pointerb":
+			return "cycle_pointer";
+		case "stackl":
+		case "stackh":
+		case "stackp":
+		case "stackb":
+		case "stackha":
+		case "stackhx":
+			return "cycle_stack";
+		case "vectorl":
+		case "vectorh":
+		case "vectorb":
+		case "vectorcodel":
+		case "vectorcodeh":
+			return "cycle_vector";
+		default:
+			return "cycle";
 	}
 }
 
@@ -255,6 +306,7 @@ function refreshTable() {
 		}
 
 		let row = document.createElement("tr");
+		row.classList.add("results");
 		output.append(row);
 
 		function cell(t, className) {
@@ -275,7 +327,7 @@ function refreshTable() {
 			let speed = costOfStep(step);
 			totalMasterCycles += speed;
 			if(speed) {
-				cell(speed, "cycle");
+				cell(speed, classOfStep(cycleList[j]));
 				fillerCycles--;
 			}
 		}
