@@ -174,8 +174,7 @@ function costOfStep(step) {
 		case "datahx":
 			return i16 ? dataspeed : 0;
 
-		case "directl16":
-		case "directh16":
+		case "direct16":
 		case "directl":
 			return dpspeed;
 		case "directh":
