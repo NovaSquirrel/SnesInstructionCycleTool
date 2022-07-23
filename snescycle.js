@@ -15,7 +15,7 @@ var instructionTypes = [
 	["op", "param", "param", "io_pagecross_or_i16", "datal", "datah"],
 	"absolute,x", ["ldy"],
 	["op", "param", "param", "io_pagecross_or_i16", "datalx", "datahx"],
-	"absolute,x", ["sta"],
+	"absolute,x", ["sta", "stz"],
 	["op", "param", "param", "io", "datal", "datah"],
 
 	"absolute,y", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc"],
