@@ -289,6 +289,8 @@ function refreshTable() {
 	faststack = document.getElementById("faststack").checked;
 	search = document.getElementById("search").value.toLowerCase();
 	let hasSearch = search !== null && !search.match(/^ *$/);
+	let totalDivide6 = document.getElementById("total_divide6").checked;
+	let totalDivide8 = document.getElementById("total_divide8").checked;
 
 	for(let i=0; i<instructionTypes.length/3; i++) {
 		let group = instructionTypes[i*3+0];
@@ -337,7 +339,12 @@ function refreshTable() {
 		for(let j=0; j<fillerCycles; j++) {
 			cell("", "cycle");
 		}
-		cell(totalMasterCycles, "total");
-
+		if(totalDivide6) {
+			cell(Math.round(totalMasterCycles/6*100)/100, "total");
+		} else if(totalDivide8) {
+			cell(Math.round(totalMasterCycles/8*100)/100, "total");
+		} else {
+			cell(totalMasterCycles, "total");
+		}
 	}
 }

@@ -51,6 +51,18 @@
 	</div>
 </fieldset>
 
+<fieldset>
+	<legend>Total column</legend>
+	<div>
+		<input type="radio" id="total_master" name="dividetotal" value="master" onchange="refreshTable();" checked>
+		<label for="total_master">Master clock</label><br>
+		<input type="radio" id="total_divide6" name="dividetotal" value="divide6" onchange="refreshTable();">
+		<label for="total_divide6">&divide; 6 (Fast)</label><br>
+		<input type="radio" id="total_divide8" name="dividetotal" value="divide8" onchange="refreshTable();">
+		<label for="total_divide8">&divide; 8 (Slow)</label><br>
+	</div>
+</fieldset>
+
 <div>
 	<br>
 	<table border="0">
