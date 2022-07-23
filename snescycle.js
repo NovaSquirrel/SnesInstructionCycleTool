@@ -213,17 +213,17 @@ function costOfStep(step) {
 }
 
 function initTable() {
-	let output = document.getElementById("output");
-	
-	for(let i=0; i<instructionTypes.length/3; i++) {
-		let row = document.createElement("tr");
-		row.id = "output" + i;
-		output.append(row);
-	}
 	refreshTable();
 }
 
 function refreshTable() {
+	let output = document.getElementById("output");
+	// Remove all table rows except the first one
+	while (output.children.length > 1) {
+		output.removeChild(output.children[1]);
+	}
+
+	// Get parameters
 	a16 = document.getElementById("a16").checked;
 	i16 = document.getElementById("i16").checked;
 	dpunalign = document.getElementById("dpunalign").checked;
@@ -233,13 +233,29 @@ function refreshTable() {
 	fastdata = document.getElementById("fastdata").checked;
 	fastdp = document.getElementById("fastdp").checked;
 	faststack = document.getElementById("faststack").checked;
+	search = document.getElementById("search").value.toLowerCase();
+	let hasSearch = search !== null && !search.match(/^ *$/);
 
 	for(let i=0; i<instructionTypes.length/3; i++) {
-		let row = document.getElementById("output" + i);
-		row.id = "output" + i;
-		while (row.firstChild) {
-			row.removeChild(row.firstChild);
+		let group = instructionTypes[i*3+0];
+		let operations = instructionTypes[i*3+1];
+		let cycleList = instructionTypes[i*3+2];
+
+		// Should this row be made?
+		if(hasSearch) {
+			let hasSearchedFor = false;
+			for(let j=0; j<operations.length; j++) {
+				if(operations[j].startsWith(search)) {
+					hasSearchedFor = true
+					break;
+				}
+			}
+			if(!hasSearchedFor)
+				continue;
 		}
+
+		let row = document.createElement("tr");
+		output.append(row);
 
 		function cell(t, className) {
 			let c = document.createElement("td");
@@ -248,9 +264,8 @@ function refreshTable() {
 			row.append(c);
 		}
 
-		cell(instructionTypes[i*3+0],           "group");
-		cell(instructionTypes[i*3+1].join(" "), "operations");
-		let cycleList = instructionTypes[i*3+2];
+		cell(group,                "group");
+		cell(operations.join(" "), "operations");
 
 		let fillerCycles = 9;
 		let totalMasterCycles = 0;
