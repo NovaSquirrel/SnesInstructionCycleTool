@@ -55,9 +55,9 @@ var instructionTypes = [
 	"[direct],y", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
 	["op", "param", "direct_unaligned", "pointerl", "pointerh", "pointerb", "datal", "datah"],
 	"d,s", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
-	["op", "param", "io", "datal", "datah"],
+	["op", "param", "io", "stackl", "stackha"],
 	"(d,s),y", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
-	["op", "param", "io", "pointerl", "pointerh", "io", "datal", "datah"],
+	["op", "param", "io", "stackpointer", "stackpointer", "io", "datal", "datah"],
 
 	"immediate", ["adc", "and", "bit", "cmp", "eor", "lda", "ora"],
 	["op", "param", "paramh"],
@@ -198,6 +198,7 @@ function costOfStep(step) {
 		case "stackh":
 		case "stackp":
 		case "stackb":
+		case "stackpointer":
 			return stackspeed;
 		case "stackha":
 			return a16 ? stackspeed : 0;
@@ -244,6 +245,8 @@ function classOfStep(step) {
 		case "pointerh":
 		case "pointerb":
 			return "cycle_pointer";
+		case "stackha":
+		case "stackpointer":
 		case "stackl":
 		case "stackh":
 		case "stackp":
