@@ -1,0 +1,62 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="snescycle.css">
+	<script src="snescycle.js"></script>
+	<title>SNES instruction speed compare tool</title>
+</head>
+<body onload="initTable();";>
+
+<div style="display: flex;">
+<fieldset>
+	<legend>Processor state</legend>
+	<div>
+		<input type="checkbox" id="a16" name="a16" onchange="refreshTable();" checked>
+		<label for="a16">16-bit accumulator</label>
+	</div>
+	<div>
+		<input type="checkbox" id="i16" name="i16" onchange="refreshTable();" checked>
+		<label for="i16">16-bit index registers</label>
+	</div>
+	<div>
+		<input type="checkbox" id="dpunalign" name="dpunalign" onchange="refreshTable();">
+		<label for="dpunalign">Direct page's low byte is not zero</label>
+	</div>
+	<div>
+		<input type="checkbox" id="pagecross" name="pagecross" onchange="refreshTable();">
+		<label for="pagecross">Page crossed</label>
+	</div>
+	<div>
+		<input type="checkbox" id="emulation" name="emulation" onchange="refreshTable();">
+		<label for="emulation">Emulation mode</label>
+	</div>
+</fieldset>
+
+<fieldset>
+	<legend>Speed</legend>
+	<div>
+		<input type="checkbox" id="fastcode" name="fastcode" onchange="refreshTable();" checked>
+		<label for="fastcode">Code is in fast memory</label>
+	</div>
+	<div>
+		<input type="checkbox" id="fastdata" name="fastdata" onchange="refreshTable();">
+		<label for="fastdata">Data is in fast memory</label>
+	</div>
+	<div>
+		<input type="checkbox" id="fastdp" name="fastdp" onchange="refreshTable();">
+		<label for="fastdp">Direct page is in fast memory</label>
+	</div>
+	<div>
+		<input type="checkbox" id="faststack" name="faststack" onchange="refreshTable();">
+		<label for="faststack">Stack is in fast memory</label>
+	</div>
+</fieldset>
+</div>
+
+<table border="1" id="output">
+	<tr>
+		<th>Group</th><th style="max-width:10%;">Operations</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>Total</th>
+	</tr>
+</table>
+
+</body>
+</html>

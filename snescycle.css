@@ -1,0 +1,15 @@
+.group {
+
+}
+.operations {
+	font-family: monospace;
+}
+.cycle {
+
+}
+.total {
+
+}
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}

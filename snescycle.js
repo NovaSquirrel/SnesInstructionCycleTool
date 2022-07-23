@@ -1,0 +1,273 @@
+var instructionTypes = [
+	"absolute", ["adc", "and", "bit", "cmp", "cpx", "cpy", "eor", "lda", "ora", "sbc", "sta", "stz"],
+	["op", "param", "param", "datal", "datah"],
+	"absolute", ["ldx", "ldy", "stx", "sty"],
+	["op", "param", "param", "datalx", "datahx"],
+
+	"absolute", ["asl", "dec", "inc", "lsr", "rol", "ror", "trb", "tsb"],
+	["op", "param", "param", "datal", "datah", "io", "datah", "datal"],
+	"absolute long", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "param", "param", "datal", "datah"],
+	"absolute,x long", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "param", "param", "datal", "datah"],
+
+	"absolute,x", ["adc", "and", "bit", "cmp", "eor", "lda", "ora", "sbc"],
+	["op", "param", "param", "io_pagecross_or_i16", "datal", "datah"],
+	"absolute,x", ["ldy"],
+	["op", "param", "param", "io_pagecross_or_i16", "datalx", "datahx"],
+	"absolute,x", ["sta"],
+	["op", "param", "param", "io", "datal", "datah"],
+
+	"absolute,y", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc"],
+	["op", "param", "param", "io_pagecross_or_i16", "datal", "datah"],
+	"absolute,y", ["ldx"],
+	["op", "param", "param", "io_pagecross_or_i16", "datalx", "datahx"],
+	"absolute,y", ["sta"],
+	["op", "param", "param", "io", "datal", "datah"],
+
+	"absolute,x", ["asl", "dec", "inc", "lsr", "rol", "ror"],
+	["op", "param", "param", "io", "datal", "datah", "io", "datah", "datal"],
+	"direct", ["adc", "and", "bit", "cmp", "eor", "lda", "ora", "sbc", "sta", "stz"],
+	["op", "param", "direct_unaligned", "datal", "datah"],
+	"direct", ["cpx", "cpy", "ldx", "ldy", "stx", "sty"],
+	["op", "param", "direct_unaligned", "datalx", "datahx"],
+
+	"direct,x", ["adc", "and", "bit", "cmp", "eor", "lda", "ora", "sbc", "sta", "stz"],
+	["op", "param", "direct_unaligned", "io", "datal", "datah"],
+	"direct,x", ["ldy", "sty"],
+	["op", "param", "direct_unaligned", "io", "datal", "datah"],
+	"direct,y", ["ldx", "stx"],
+	["op", "param", "direct_unaligned", "io", "datalx", "datahx"],
+	"direct", ["asl", "dec", "inc", "lsr", "rol", "ror", "trb", "tsb"],
+	["op", "param", "direct_unaligned", "datal", "datah", "io", "datah", "datal"],
+	"direct,x", ["asl", "dec", "inc", "lsr", "rol", "ror"],
+	["op", "param", "direct_unaligned", "io", "datal", "datah", "io", "datah", "datal"],
+	"(direct)",  ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "direct_unaligned", "pointerl", "pointerh", "datal", "datah"],
+	"(direct,x)", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "direct_unaligned", "io", "pointerl", "pointerh", "datal", "datah"],
+	"(direct),y", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc"],
+	["op", "param", "direct_unaligned", "pointerl", "pointerh", "io_pagecross_or_i16", "datal", "datah"],
+	"(direct),y", ["sta"],
+	["op", "param", "direct_unaligned", "pointerl", "pointerh", "io", "datal", "datah"],
+	"[direct]",  ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "direct_unaligned", "pointerl", "pointerh", "pointerb", "datal", "datah"],
+	"[direct],y", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "direct_unaligned", "pointerl", "pointerh", "pointerb", "datal", "datah"],
+	"d,s", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "io", "datal", "datah"],
+	"(d,s),y", ["adc", "and", "cmp", "eor", "lda", "ora", "sbc", "sta"],
+	["op", "param", "io", "pointerl", "pointerh", "io", "datal", "datah"],
+
+	"immediate", ["adc", "and", "bit", "cmp", "eor", "lda", "ora"],
+	["op", "param", "paramh"],
+	"immediate", ["cpx", "cpy", "ldx", "ldy"],
+	["op", "param", "paramhx"],
+	"immediate", ["rep", "sep"],
+	["op", "param", "io"],
+	"accumulator", ["asl", "dec", "inc", "lsr", "rol", "ror"],
+	["op", "io"],
+	"implied", ["clc", "cld", "cli", "clv", "dex", "dey", "inx", "iny", "nop", "sec", "sed", "sei", "tax", "tay", "tcd", "tcs", "tdc", "tsc", "tsx", "txa", "txs", "txy", "tya", "tyx", "xce"],
+	["op", "io"],
+	"implied", ["xba"],
+	["op", "io", "io"],
+
+	"branch taken", ["bcc", "bcs", "beq", "bmi", "bne", "bpl", "bra", "bvc", "bvs"],
+	["op", "param", "io", "io_emulation_and_cross"],
+	"branch taken", ["brl"],
+	["op", "param", "param", "io"],
+	"branch not taken", ["bcc", "bcs", "beq", "bmi", "bne", "bpl", "bvc", "bvs"],
+	["op", "param"],
+
+	"stack", ["pha"],
+	["op", "io", "stackha", "stackl"],
+	"stack", ["phb", "php", "phk"],
+	["op", "io", "stackl"],
+	"stack", ["phx", "phy"],
+	["op", "io", "stackhx", "stackl"],
+	"stack", ["phd"],
+	["op", "io", "stackh", "stackl"],
+
+	"stack", ["pla"],
+	["op", "io", "io", "stackl", "stackha"],
+	"stack", ["plx", "ply"],
+	["op", "io", "io", "stackl", "stackhx"],
+	"stack", ["plb", "plp"],
+	["op", "io", "io", "stackl"],
+	"stack", ["pld"],
+	["op", "io", "io", "stackl", "stackh"],
+
+	"stack", ["pea"],
+	["op", "param", "param", "stackh", "stackl"],
+	"stack", ["pei"],
+	["op", "param", "direct_unaligned", "pointerl", "pointerh", "stackh", "stackl"],
+	"stack", ["per"],
+	["op", "param", "param", "io", "stackh", "stackl"],
+	"stack", ["rts"],
+	["op", "io", "io", "stackl", "stackh", "io"],
+	"stack", ["rtl"],
+	["op", "io", "io", "stackl", "stackh", "stackb", "io"],
+	"stack", ["rti"],
+	["op", "io", "io", "stackp", "stackl", "stackh", "stackb", "io"],
+	"interrupt", ["abort", "irq", "nmi", "reset"],
+	["io", "io", "stackb", "stackh", "stackl", "stackp", "vectorl", "vectorh"],
+	"immediate", ["brk", "cop"],
+	["op", "param", "stackb", "stackh", "stackl", "stackp", "vectorl", "vectorh"],
+
+	"absolute", ["jmp"],
+	["op", "param", "param"],
+	"absolute long", ["jml"],
+	["op", "param", "param", "param"],
+	"absolute", ["jsr"],
+	["op", "param", "param", "io", "stackh", "stackl"],
+	"absolute long", ["jsl"],
+	["op", "param", "param", "stackb", "io", "param", "stackh", "stackl"],
+	"(absolute)", ["jmp"],
+	["op", "param", "param", "datal", "datah"],
+	"[absolute]", ["jml"],
+	["op", "param", "param", "vectorl", "vectorh", "vectorb"],
+	"(absolute,x)", ["jsr"],
+	["op", "param", "param", "io", "datal", "datah"],
+	"(absolute,x)", ["jsr"],
+	["op", "param", "stackh", "stackl", "param", "io", "datal", "datah"],
+];
+
+let a16 = true;
+let i16 = true;
+let dpunalign = false;
+let pagecross = false;
+let emulation = false;
+let fastcode = true;
+let fastdata = false;
+let fastdp = false;
+let faststack = false;
+
+function costOfStep(step) {
+	const slow = 8;
+	const fast = 6;
+	let codespeed  = fastcode  ? fast : slow;
+	let dataspeed  = fastdata  ? fast : slow;
+	let dpspeed    = fastdp    ? fast : slow;
+	let stackspeed = faststack ? fast : slow;
+
+	switch(step) {
+		case "direct_unaligned":
+			return dpunalign ? fast : 0;
+		case "io":
+			return fast;
+
+		case "op":
+		case "param":
+			return codespeed;
+		case "paramh":
+			return a16 ? codespeed : 0;
+		case "paramhx":
+			return i16 ? codespeed : 0;
+
+		case "datal":
+			return dataspeed;
+		case "datah":
+			return a16 ? dataspeed : 0;
+
+		case "datalx":
+			return dataspeed;
+		case "datahx":
+			return i16 ? dataspeed : 0;
+
+		case "directl":
+			return dpspeed;
+		case "directh":
+			return a16 ? dpspeed : 0;
+		case "directlx":
+			return dpspeed;
+		case "directhx":
+			return i16 ? dpspeed : 0;
+
+		case "io_pagecross_or_i16":
+			return (i16 || pagecross) ? fast : 0;
+		case "io_emulation_and_cross":
+			return (emulation && pagecross) ? fast : 0;
+
+		case "pointerl":
+		case "pointerh":
+		case "pointerb":
+			return dpspeed;
+
+		case "stackl":
+		case "stackh":
+		case "stackp":
+		case "stackb":
+			return stackspeed;
+		case "stackha":
+			return a16 ? stackspeed : 0;
+		case "stackhx":
+			return i16 ? stackspeed : 0;
+
+		case "vectorl":
+		case "vectorh":
+		case "vectorb":
+			return slow;
+		default:
+			console.log(step);
+	}
+}
+
+function initTable() {
+	let output = document.getElementById("output");
+	
+	for(let i=0; i<instructionTypes.length/3; i++) {
+		let row = document.createElement("tr");
+		row.id = "output" + i;
+		output.append(row);
+	}
+	refreshTable();
+}
+
+function refreshTable() {
+	a16 = document.getElementById("a16").checked;
+	i16 = document.getElementById("i16").checked;
+	dpunalign = document.getElementById("dpunalign").checked;
+	pagecross = document.getElementById("pagecross").checked;
+	emulation = document.getElementById("emulation").checked;
+	fastcode = document.getElementById("fastcode").checked;
+	fastdata = document.getElementById("fastdata").checked;
+	fastdp = document.getElementById("fastdp").checked;
+	faststack = document.getElementById("faststack").checked;
+
+	for(let i=0; i<instructionTypes.length/3; i++) {
+		let row = document.getElementById("output" + i);
+		row.id = "output" + i;
+		while (row.firstChild) {
+			row.removeChild(row.firstChild);
+		}
+
+		function cell(t, className) {
+			let c = document.createElement("td");
+			c.innerHTML = t;
+			c.classList.add(className);
+			row.append(c);
+		}
+
+		cell(instructionTypes[i*3+0],           "group");
+		cell(instructionTypes[i*3+1].join(" "), "operations");
+		let cycleList = instructionTypes[i*3+2];
+
+		let fillerCycles = 9;
+		let totalMasterCycles = 0;
+
+		for(let j=0; j<cycleList.length; j++) {
+			let step = cycleList[j];
+			let speed = costOfStep(step);
+			totalMasterCycles += speed;
+			if(speed) {
+				cell(speed, "cycle");
+				fillerCycles--;
+			}
+		}
+		for(let j=0; j<fillerCycles; j++) {
+			cell("", "cycle");
+		}
+		cell(totalMasterCycles, "total");
+
+	}
+}
