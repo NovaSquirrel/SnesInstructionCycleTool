@@ -123,7 +123,7 @@ var instructionTypes = [
 	"absolute long", ["jsl"],
 	["op", "param", "param", "stackb", "io", "param", "stackh", "stackl"],
 	"(absolute)", ["jmp"],
-	["op", "param", "param", "vectorl", "vectorhh"],
+	["op", "param", "param", "vectorl", "vectorh"],
 	"[absolute]", ["jml"],
 	["op", "param", "param", "vectorl", "vectorh", "vectorb"],
 	"(absolute,x)", ["jmp"],
