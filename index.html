@@ -10,11 +10,11 @@
 <fieldset>
 	<legend>Processor state</legend>
 	<div>
-		<input type="checkbox" id="a16" name="a16" onchange="refreshTable();" checked>
+		<input type="checkbox" id="a16" name="a16" onchange="refreshTable();" onclick="noEmulation();" checked>
 		<label for="a16">16-bit accumulator</label>
 	</div>
 	<div>
-		<input type="checkbox" id="i16" name="i16" onchange="refreshTable();" checked>
+		<input type="checkbox" id="i16" name="i16" onchange="refreshTable();" onclick="noEmulation();" checked>
 		<label for="i16">16-bit index registers</label>
 	</div>
 	<div>
@@ -26,7 +26,7 @@
 		<label for="pagecross">Page crossed</label>
 	</div>
 	<div>
-		<input type="checkbox" id="emulation" name="emulation" onchange="refreshTable();">
+		<input type="checkbox" id="emulation" name="emulation" onchange="refreshTable();" onclick="no16Bit();">
 		<label for="emulation">Emulation mode</label>
 	</div>
 </fieldset>

@@ -70,8 +70,10 @@ var instructionTypes = [
 	["op", "io"],
 	"implied", ["clc", "cld", "cli", "clv", "dex", "dey", "inx", "iny", "nop", "sec", "sed", "sei", "tax", "tay", "tcd", "tcs", "tdc", "tsc", "tsx", "txa", "txs", "txy", "tya", "tyx", "xce"],
 	["op", "io"],
-	"implied", ["xba"],
+	"implied", ["xba", "wai", "stp"],
 	["op", "io", "io"],
+	"block transfer", ["mvn", "mvp"],
+	["op", "param", "param", "datal", "datal", "io", "io"],
 
 	"branch taken", ["bcc", "bcs", "beq", "bmi", "bne", "bpl", "bra", "bvc", "bvs"],
 	["op", "param", "io", "io_emulation_and_cross"],
@@ -195,10 +197,11 @@ function costOfStep(step) {
 		case "pointerb":
 			return dpspeed;
 
+		case "stackb":
+			return emulation ? 0 : stackspeed;
 		case "stackl":
 		case "stackh":
 		case "stackp":
-		case "stackb":
 		case "stackpointer":
 			return stackspeed;
 		case "stackha":
@@ -268,6 +271,15 @@ function classOfStep(step) {
 
 function initTable() {
 	refreshTable();
+}
+
+function noEmulation() {
+	document.getElementById("emulation").checked = false;
+}
+
+function no16Bit() {
+	document.getElementById("a16").checked = false;
+	document.getElementById("i16").checked = false;
 }
 
 function refreshTable() {
