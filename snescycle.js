@@ -66,6 +66,8 @@ var instructionTypes = [
 	["op", "param", "paramhx"],
 	"immediate", ["rep", "sep"],
 	["op", "param", "io"],
+	"immediate", ["wdm"],
+	["op", "param"],
 	"accumulator", ["asl", "dec", "inc", "lsr", "rol", "ror"],
 	["op", "io"],
 	"implied", ["clc", "cld", "cli", "clv", "dex", "dey", "inx", "iny", "nop", "sec", "sed", "sei", "tax", "tay", "tcd", "tcs", "tdc", "tsc", "tsx", "txa", "txs", "txy", "tya", "tyx", "xce"],
