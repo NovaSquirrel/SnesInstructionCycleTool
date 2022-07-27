@@ -145,6 +145,7 @@ let emulation = false;
 let irqpending = false;
 let fastcode = true;
 let fastdata = false;
+let controllerdata = false;
 let fastdp = false;
 let faststack = false;
 
@@ -152,7 +153,8 @@ function costOfStep(step) {
 	const slow = 8;
 	const fast = 6;
 	let codespeed  = fastcode  ? fast : slow;
-	let dataspeed  = fastdata  ? fast : slow;
+	let dataspeed  = fastdata  ? fast :
+	            controllerdata ? 12   : slow;
 	let dpspeed    = fastdp    ? fast : slow;
 	let stackspeed = faststack ? fast : slow;
 
@@ -290,6 +292,14 @@ function no16Bit() {
 	document.getElementById("i16").checked = false;
 }
 
+function noFastData() {
+	document.getElementById("fastdata").checked = false;
+}
+
+function noControllerData() {
+	document.getElementById("controllerdata").checked = false;
+}
+
 function refreshTable() {
 	let output = document.getElementById("output");
 	// Remove all table rows except the first one
@@ -306,6 +316,7 @@ function refreshTable() {
 	irqpending = document.getElementById("irqpending").checked;
 	fastcode = document.getElementById("fastcode").checked;
 	fastdata = document.getElementById("fastdata").checked;
+	controllerdata = document.getElementById("controllerdata").checked;
 	fastdp = document.getElementById("fastdp").checked;
 	faststack = document.getElementById("faststack").checked;
 	search = document.getElementById("search").value.toLowerCase();

@@ -42,8 +42,12 @@
 		<label for="fastcode">Code is in fast memory</label>
 	</div>
 	<div>
-		<input type="checkbox" id="fastdata" name="fastdata" onchange="refreshTable();">
+		<input type="checkbox" id="fastdata" name="fastdata" onchange="refreshTable();" onclick="noControllerData();">
 		<label for="fastdata">Data is in fast memory</label>
+	</div>
+	<div>
+		<input type="checkbox" id="controllerdata" name="controllerdata" onchange="refreshTable();" onclick="noFastData();">
+		<label for="controllerdata">Data is $4016/$4017</label>
 	</div>
 	<div>
 		<input type="checkbox" id="fastdp" name="fastdp" onchange="refreshTable();">
