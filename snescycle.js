@@ -69,9 +69,9 @@ var instructionTypes = [
 	"immediate", ["wdm"],
 	["op", "param"],
 	"accumulator", ["asl", "dec", "inc", "lsr", "rol", "ror"],
-	["op", "io"],
+	["op", "io_unless_irq"],
 	"implied", ["clc", "cld", "cli", "clv", "dex", "dey", "inx", "iny", "nop", "sec", "sed", "sei", "tax", "tay", "tcd", "tcs", "tdc", "tsc", "tsx", "txa", "txs", "txy", "tya", "tyx", "xce"],
-	["op", "io"],
+	["op", "io_unless_irq"],
 	"implied", ["xba", "wai", "stp"],
 	["op", "io", "io"],
 	"block transfer", ["mvn", "mvp"],
@@ -142,6 +142,7 @@ let i16 = true;
 let dpunalign = false;
 let pagecross = false;
 let emulation = false;
+let irqpending = false;
 let fastcode = true;
 let fastdata = false;
 let fastdp = false;
@@ -160,6 +161,8 @@ function costOfStep(step) {
 			return dpunalign ? fast : 0;
 		case "io":
 			return fast;
+		case "io_unless_irq":
+			return irqpending ? codespeed : fast;
 
 		case "op":
 		case "param":
@@ -231,6 +234,9 @@ function classOfStep(step) {
 			return "cycle_penalty"
 		case "io":
 			return "cycle_internal_operation"
+		case "io_unless_irq":
+			return irqpending ? "cycle_code" : "cycle_internal_operation";
+
 		case "op":
 		case "param":
 		case "paramh":
@@ -297,6 +303,7 @@ function refreshTable() {
 	dpunalign = document.getElementById("dpunalign").checked;
 	pagecross = document.getElementById("pagecross").checked;
 	emulation = document.getElementById("emulation").checked;
+	irqpending = document.getElementById("irqpending").checked;
 	fastcode = document.getElementById("fastcode").checked;
 	fastdata = document.getElementById("fastdata").checked;
 	fastdp = document.getElementById("fastdp").checked;
